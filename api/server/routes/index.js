@@ -1,4 +1,5 @@
 const assistants = require('./assistants');
+const inciteAssistants = require('./inciteAssistants');
 const categories = require('./categories');
 const tokenizer = require('./tokenizer');
 const endpoints = require('./endpoints');
@@ -25,6 +26,7 @@ const keys = require('./keys');
 const user = require('./user');
 const ask = require('./ask');
 const banner = require('./banner');
+const yourNewEndpoint = require('./yourNewEndpoint');
 
 module.exports = {
   ask,
@@ -51,6 +53,8 @@ module.exports = {
   endpoints,
   tokenizer,
   assistants,
+  inciteAssistants,
+  yourNewEndpoint,
   categories,
   staticRoute,
   banner,

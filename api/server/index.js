@@ -1,5 +1,5 @@
 require('dotenv').config();
-const path = require('path');
+const path = require('node:path');
 require('module-alias')({ base: path.resolve(__dirname, '..') });
 const cors = require('cors');
 const axios = require('axios');
@@ -7,7 +7,7 @@ const express = require('express');
 const compression = require('compression');
 const passport = require('passport');
 const mongoSanitize = require('express-mongo-sanitize');
-const fs = require('fs');
+const fs = require('node:fs');
 const cookieParser = require('cookie-parser');
 const { jwtLogin, passportLogin } = require('~/strategies');
 const { connectDb, indexSync } = require('~/lib/db');
@@ -118,14 +118,13 @@ const startServer = async () => {
     const updatedIndexHtml = indexHTML.replace(/lang="en-US"/g, `lang="${saneLang}"`);
     res.send(updatedIndexHtml);
   });
-
   app.listen(port, host, () => {
-    if (host == '0.0.0.0') {
+    if (host === '0.0.0.0') {
       logger.info(
         `Server listening on all interfaces at port ${port}. Use http://localhost:${port} to access it`,
       );
     } else {
-      logger.info(`Server listening at http://${host == '0.0.0.0' ? 'localhost' : host}:${port}`);
+      logger.info(`Server listening at http://${host === '0.0.0.0' ? 'localhost' : host}:${port}`);
     }
   });
 };

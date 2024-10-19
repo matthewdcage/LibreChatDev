@@ -113,72 +113,89 @@ export default function Settings({ conversation, setOption, models, readonly }: 
 
   const optionEndpoint = endpointType ?? endpoint;
 
+  const endpointOptions = [
+    { value: 'assistants', label: 'OpenAI Assistants' },
+    { value: 'inciteAssistants', label: 'Incite Assistants' },
+    { value: 'yourNewEndpoint', label: 'Your New Endpoint Label' },
+  ];
+
+  const [selectedEndpoint, setSelectedEndpoint] = useState(conversation.endpoint || 'assistants');
+
   return (
     <div className="grid grid-cols-6 gap-6">
-      <div className="col-span-6 flex flex-col items-center justify-start gap-6 sm:col-span-3">
-        <div className="grid w-full items-center gap-2">
-          <SelectDropDown
-            value={model ?? ''}
-            setValue={createDropdownSetter(setModel)}
-            availableValues={modelOptions}
-            disabled={readonly}
-            className={cn(defaultTextProps, 'flex w-full resize-none', removeFocusRings)}
-            containerClassName="flex w-full resize-none"
-          />
-        </div>
-      </div>
-      <div className="col-span-6 flex flex-col items-center justify-start gap-6 px-3 sm:col-span-3">
-        <HoverCard openDelay={300}>
-          <HoverCardTrigger className="grid w-full items-center gap-2">
-            <div className="grid w-full items-center gap-2">
-              <SelectDropDown
-                title={localize('com_endpoint_assistant')}
-                value={assistantValue}
-                setValue={createDropdownSetter(setAssistant)}
-                availableValues={assistants as Option[]}
-                disabled={readonly}
-                className={cn(defaultTextProps, 'flex w-full resize-none', removeFocusRings)}
-                containerClassName="flex w-full resize-none"
-              />
-            </div>
-          </HoverCardTrigger>
-          <OptionHover endpoint={optionEndpoint ?? ''} type="temp" side={ESide.Left} />
-        </HoverCard>
-      </div>
       <div className="col-span-6 flex flex-col items-center justify-start gap-6">
         <div className="grid w-full items-center gap-2">
-          <Label htmlFor="promptPrefix" className="text-left text-sm font-medium">
-            {localize('com_endpoint_prompt_prefix_assistants')}{' '}
-            <small className="opacity-40">({localize('com_endpoint_default_blank')})</small>
+          <Label htmlFor="endpoint" className="text-left text-sm font-medium">
+            {localize('com_endpoint_select_assistant_type')}
           </Label>
-          <TextareaAutosize
-            id="promptPrefix"
-            disabled={readonly}
-            value={(promptPrefixValue as string | null | undefined) ?? ''}
-            onChange={onPromptPrefixChange}
-            placeholder={localize('com_endpoint_prompt_prefix_assistants_placeholder')}
-            className={cn(
-              defaultTextProps,
-              'flex max-h-[240px] min-h-[80px] w-full resize-none px-3 py-2 ',
-            )}
-          />
+          <Select
+            id="endpoint"
+            value={selectedEndpoint}
+            onValueChange={(value) => {
+              setSelectedEndpoint(value);
+              setOption('endpoint')(value);
+            }}
+          >
+            {endpointOptions.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </Select>
         </div>
-        <div className="grid w-full items-center gap-2">
-          <Label htmlFor="instructions" className="text-left text-sm font-medium">
-            {localize('com_endpoint_instructions_assistants')}{' '}
-            <small className="opacity-40">({localize('com_endpoint_default_blank')})</small>
-          </Label>
-          <TextareaAutosize
-            id="instructions"
-            disabled={readonly}
-            value={(instructionsValue as string | null | undefined) ?? ''}
-            onChange={onInstructionsChange}
-            placeholder={localize('com_endpoint_instructions_assistants_placeholder')}
-            className={cn(
-              defaultTextProps,
-              'flex max-h-[240px] min-h-[80px] w-full resize-none px-3 py-2 ',
-            )}
-          />
+        <div className="col-span-6 flex flex-col items-center justify-start gap-6 px-3 sm:col-span-3">
+          <HoverCard openDelay={300}>
+            <HoverCardTrigger className="grid w-full items-center gap-2">
+              <div className="grid w-full items-center gap-2">
+                <SelectDropDown
+                  title={localize('com_endpoint_assistant')}
+                  value={assistantValue}
+                  setValue={createDropdownSetter(setAssistant)}
+                  availableValues={assistants as Option[]}
+                  disabled={readonly}
+                  className={cn(defaultTextProps, 'flex w-full resize-none', removeFocusRings)}
+                  containerClassName="flex w-full resize-none"
+                />
+              </div>
+            </HoverCardTrigger>
+            <OptionHover endpoint={optionEndpoint ?? ''} type="temp" side={ESide.Left} />
+          </HoverCard>
+        </div>
+        <div className="col-span-6 flex flex-col items-center justify-start gap-6">
+          <div className="grid w-full items-center gap-2">
+            <Label htmlFor="promptPrefix" className="text-left text-sm font-medium">
+              {localize('com_endpoint_prompt_prefix_assistants')}{' '}
+              <small className="opacity-40">({localize('com_endpoint_default_blank')})</small>
+            </Label>
+            <TextareaAutosize
+              id="promptPrefix"
+              disabled={readonly}
+              value={(promptPrefixValue as string | null | undefined) ?? ''}
+              onChange={onPromptPrefixChange}
+              placeholder={localize('com_endpoint_prompt_prefix_assistants_placeholder')}
+              className={cn(
+                defaultTextProps,
+                'flex max-h-[240px] min-h-[80px] w-full resize-none px-3 py-2 ',
+              )}
+            />
+          </div>
+          <div className="grid w-full items-center gap-2">
+            <Label htmlFor="instructions" className="text-left text-sm font-medium">
+              {localize('com_endpoint_instructions_assistants')}{' '}
+              <small className="opacity-40">({localize('com_endpoint_default_blank')})</small>
+            </Label>
+            <TextareaAutosize
+              id="instructions"
+              disabled={readonly}
+              value={(instructionsValue as string | null | undefined) ?? ''}
+              onChange={onInstructionsChange}
+              placeholder={localize('com_endpoint_instructions_assistants_placeholder')}
+              className={cn(
+                defaultTextProps,
+                'flex max-h-[240px] min-h-[80px] w-full resize-none px-3 py-2 ',
+              )}
+            />
+          </div>
         </div>
       </div>
     </div>

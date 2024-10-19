@@ -28,3 +28,5 @@ export type AssistantForm = {
   model: string;
   functions: string[];
 } & Actions;
+
+export type AssistantsEndpoint = 'assistants' | 'inciteAssistants' | 'yourNewEndpoint' | string;

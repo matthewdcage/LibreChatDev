@@ -755,38 +755,9 @@ export const useTextToSpeechMutation = (
 /**
  * Create a new assistant
  */
-export const useCreateAssistantMutation = (
-  options?: t.CreateAssistantMutationOptions,
-): UseMutationResult<t.Assistant, Error, t.AssistantCreateParams> => {
-  const queryClient = useQueryClient();
-  return useMutation(
-    (newAssistantData: t.AssistantCreateParams) => dataService.createAssistant(newAssistantData),
-    {
-      onMutate: (variables) => options?.onMutate?.(variables),
-      onError: (error, variables, context) => options?.onError?.(error, variables, context),
-      onSuccess: (newAssistant, variables, context) => {
-        const listRes = queryClient.getQueryData<t.AssistantListResponse>([
-          QueryKeys.assistants,
-          variables.endpoint,
-          defaultOrderQuery,
-        ]);
-
-        if (!listRes) {
-          return options?.onSuccess?.(newAssistant, variables, context);
-        }
-
-        const currentAssistants = [newAssistant, ...JSON.parse(JSON.stringify(listRes.data))];
-
-        queryClient.setQueryData<t.AssistantListResponse>(
-          [QueryKeys.assistants, variables.endpoint, defaultOrderQuery],
-          {
-            ...listRes,
-            data: currentAssistants,
-          },
-        );
-        return options?.onSuccess?.(newAssistant, variables, context);
-      },
-    },
+export const useCreateAssistantMutation = (endpoint: AssistantsEndpoint) => {
+  return useMutation((assistant: AssistantCreateParams) =>
+    axios.post(`/api/${endpoint}`, assistant),
   );
 };
 

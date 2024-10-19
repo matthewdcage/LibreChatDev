@@ -24,6 +24,11 @@ export default function useSelectAssistant(endpoint: AssistantsEndpoint) {
         conversationId: 'new',
       };
 
+      // Add any specific logic for your new endpoint here
+      if (endpoint === 'yourNewEndpoint') {
+        // Handle any specific requirements for your new endpoint
+      }
+
       if (isAssistantsEndpoint(conversation?.endpoint)) {
         const currentConvo = getDefaultConversation({
           conversation: { ...(conversation ?? {}) },

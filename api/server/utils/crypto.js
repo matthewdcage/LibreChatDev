@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const { webcrypto } = require('node:crypto');
-const key = Buffer.from(process.env.CREDS_KEY, 'hex');
+const key = Buffer.from(process.env.CRYPT_KEY, 'hex');
 const iv = Buffer.from(process.env.CREDS_IV, 'hex');
 const algorithm = 'AES-CBC';
 
@@ -65,7 +65,7 @@ async function encryptV2(value) {
     data,
   );
 
-  return Buffer.from(gen_iv).toString('hex') + ':' + Buffer.from(encryptedBuffer).toString('hex');
+  return `${Buffer.from(gen_iv).toString('hex')}:${Buffer.from(encryptedBuffer).toString('hex')}`;
 }
 
 async function decryptV2(encryptedValue) {
